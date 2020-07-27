@@ -1,6 +1,29 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
+// TASK 02
+export const postComment = (dishId, rating, author, comment) => (dispatch, getState) => {
+    const date = new Date().toISOString();
+    const id = getState().comments.comments.length;
+    const newComment = {
+        id,
+        dishId,
+        rating,
+        author,
+        comment,
+        date
+    };
+    console.log(newComment);
+    setTimeout(() => {
+        dispatch(addComment(newComment));
+    }, 2000);
+}
+export const addComment = (newComment) => ({
+    type: ActionTypes.ADD_COMMENT,
+    payload: newComment
+
+});
+
 export const fetchComments = () => (dispatch) => {
     return fetch(baseUrl + 'comments')
         .then(response => {
@@ -138,3 +161,15 @@ export const addLeaders = (leaders) => ({
     payload: leaders
 });
 
+export const postFavorite = (dishId) => (dispatch) => {
+
+    setTimeout(() => {
+        dispatch(addFavorite(dishId));
+    }, 2000);
+};
+
+
+export const addFavorite = (dishId) => ({
+    type: ActionTypes.ADD_FAVORITE,
+    payload: dishId
+});
