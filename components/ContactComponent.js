@@ -22,12 +22,12 @@ class Contact extends Component {
                 >
                     <Text
                         style={{ margin: 10 }}>
-                        121, Clear Water Bay Road <br />
-                    Clear Water Bay, Kowloon <br />
-                    HONG KONG <br />
-                    Tel: +852 1234 5678 <br />
-                    Fax: +852 8765 4321 <br />
-                    Email:confusion@food.net
+                        121, Clear Water Bay Road
+                        Clear Water Bay, Kowloon
+                        HONG KONG
+                        Tel: +852 1234 5678
+                        Fax: +852 8765 4321
+                        Email:confusion@food.net
                 </Text>
                 </Card>
             </Animatable.View>
