@@ -136,6 +136,24 @@ class RegisterTab extends Component {
         }
 
     }
+    getImageFromGallery = async () => {
+        const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
+        const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+        if (cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted') {
+            let capturedImage = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [4, 3],
+            });
+            if (!capturedImage.cancelled) {
+                console.log(capturedImage);
+                this.processImage(capturedImage.uri);
+            }
+        }
+
+
+    }
 
     processImage = async (imageUri) => {
         let processedImage = await ImageManipulator.manipulate(
@@ -149,6 +167,9 @@ class RegisterTab extends Component {
         this.setState({ imageUrl: processedImage.uri });
 
     }
+
+
+
     static navigationOptions = {
         title: 'Register',
         tabBarIcon: ({ tintColor, focused }) => (
@@ -177,10 +198,16 @@ class RegisterTab extends Component {
                             loadingIndicatorSource={require('./images/logo.png')}
                             style={styles.image}
                         />
-                        <Button
-                            title="Camera"
-                            onPress={this.getImageFromCamera}
-                        />
+                        <View style={{ justifyContent="space-between", flexDirection="row" }}>
+                            <Button
+                                title="Camera"
+                                onPress={this.getImageFromCamera}
+                            />
+                            <Button
+                                title="Galery"
+                                onPress={this.getImageFromGallery}
+                            />
+                        </View>
                     </View>
                     <Input
                         placeholder="Username"

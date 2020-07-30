@@ -3,7 +3,7 @@ import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Alert } fro
 import { Card } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker'
 import * as Animatable from 'react-native-animatable';
-import { Permissions, Notifications } from 'expo';
+import { Permissions, Notifications, Calendar } from 'expo';
 
 
 class Reservation extends Component {
@@ -49,8 +49,30 @@ class Reservation extends Component {
             }
         });
     }
+    async obtainCalendarPermission() {
+        let permission = await Permissions.getAsync(Permissions.CALENDAR);
+        if (permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.CALENDAR);
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to use calendar');
+            }
+        }
+        return permission;
+    }
+    async addReservationToCalendar(date) {
+        await this.obtainCalendarPermission();
+        Calendar.createEventAsync({
+            title: "Con Fusion Table Reservation",
+            startDate: Date(Date.parse(date)),
+            endDate: Date(Date.parse(date + (2 * 60 * 60 * 1000))),
+            location: "121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong",
+            timeZone: "Asia/Hong_Kong"
+        })
 
-    handleReservation() {
+    }
+
+    handleReservation(date) {
+        this.addReservationToCalendar(date);
         Alert.alert(
             'Your Reservation OK?',
             'Number of Guests: ' + this.state.guests,
@@ -130,7 +152,7 @@ class Reservation extends Component {
                     </View>
                     <View style={styles.formRow}>
                         <Button
-                            onPress={() => this.handleReservation()}
+                            onPress={() => this.handleReservation(this.state.date)}
                             title="Reserve"
                             color="#512DA8"
                             accessibilityLabel="Learn more about this purple button"
